@@ -75,10 +75,11 @@ Resources:
         Aliases:
           - !Sub "${Hostname}.${HostedZoneName}"
         DefaultCacheBehavior:
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad  # caching disabled
           Compress: true
           ForwardedValues:
             QueryString: false
-          TargetOriginId: the-s3-bucket
+          TargetOriginId: !Sub "S3-${Hostname}.${HostedZoneName}"
           ViewerProtocolPolicy: redirect-to-https
         DefaultRootObject: index.html
         CustomErrorResponses:
@@ -95,7 +96,7 @@ Resources:
         Origins:
           - DomainName: !Sub "${Bucket}.s3.amazonaws.com"
             OriginPath: /website
-            Id: the-s3-bucket
+            Id: !Sub "S3-${Hostname}.${HostedZoneName}"
             S3OriginConfig:
               OriginAccessIdentity:
                 !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
